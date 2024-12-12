@@ -1,10 +1,11 @@
 'use strict';
 
-const userRepository            = require( '../repositories/user-repository' );
 const notificationRepository    = require( '../repositories/notification-repository' );
+const userRepository            = require( '../repositories/user-repository' );
 
 exports.index = async ( req, res, next ) => {
-    try {
+    try 
+    {
         const userId            = req.session.user.id;
         const suggestions       = await userRepository.getFriendshipSuggestions( userId, 3 );
         const notifications     = await notificationRepository.getByUserId( userId ); 
@@ -17,9 +18,9 @@ exports.index = async ( req, res, next ) => {
             notifications   : notifications
         }); 
     }
-    catch ( e )
+    catch (e)
     {
-        console.log( e.message );
+        console.log(e.message);
         res.render( 'error500' );
     }
 };
