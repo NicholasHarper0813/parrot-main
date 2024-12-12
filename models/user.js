@@ -64,7 +64,6 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   User.associate = function(models) {
-    // associations can be defined here
     User.hasMany(models.Post, {
       foreignKey: 'user_id',
       onDelete: 'CASCADE'
@@ -88,7 +87,6 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       onDelete: 'CASCADE'
     });
-
   };
 
   return User;
