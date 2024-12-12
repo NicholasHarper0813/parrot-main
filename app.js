@@ -1,10 +1,10 @@
 var path                = require('path');
 var logger              = require('morgan');
 var session             = require('express-session');
+var expressValidator    = require('express-validator');
 var express             = require('express');
 var createError         = require('http-errors');
 var cookieParser        = require('cookie-parser');
-var expressValidator    = require('express-validator');
 
 var feedRouter              = require('./routes/feed');
 var indexRouter             = require('./routes/index');
@@ -17,22 +17,18 @@ var passwordRecoverRouter   = require('./routes/password-recover');
 
 var app = express();
 
-// view engine setup
 app.set( 'views',        path.join( __dirname, 'views' ) );
 app.set( 'view engine',  'pug' );
-
 app.use( logger( 'dev' ) );
 app.use( express.json( { limit: '2mb' } ) );
 app.use( express.urlencoded( {  extended: true, limit: '2mb' } ) );
 app.use( cookieParser() );
 app.use( express.static( path.join( __dirname, 'public' ) ) );
 app.use( expressValidator() );
-
 app.use( session({
   secret            : 'pombasocialnetwork',
   resave            : false,
   saveUninitialized : false,
-  // cookie         : { secure: true }
 }));
 
 app.use('/',                  indexRouter );
@@ -43,21 +39,17 @@ app.use('/profile',           profileRouter );
 app.use('/who-to-follow',     whoToFollowRouter );
 app.use('/notifications',     notificationsRouter );
 app.use('/password-recover',  passwordRecoverRouter );
-
-// catch 404 and forward to error handler
 app.use( function( req, res, next ) {
   next( createError( 404 ) );
 });
 
-// error handler
-app.use( function( err, req, res, next ) {
-  // set locals, only providing error in development
+app.use( function( err, req, res, next ) 
+{
   res.locals.message  = err.message;
   res.locals.error    = req.app.get('env') === 'development' ? err : {};
 
   console.log(err);
 
-  // render the error page
   let errStatus = err.status || 500; 
   res.status( errStatus );
   res.render( 'error' + errStatus );
@@ -82,7 +74,6 @@ app.locals.moment.defineLocale('pt-br-vinny', {
     y : 'um ano',
     yy : '%d anos'
   },
-  /* */
 });
 
 app.locals.moment.locale('pt-br-vinny');
