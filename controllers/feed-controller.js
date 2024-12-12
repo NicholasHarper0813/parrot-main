@@ -1,7 +1,7 @@
 'use strict';
 
-const postService       = require( '../services/post-service' );
 const ImageUploader     = require( '../services/image-uploader-service' );
+const postService       = require( '../services/post-service' );
 const userRepository    = require( '../repositories/user-repository' );
 const postRepository    = require( '../repositories/post-repository' );
 
@@ -20,8 +20,7 @@ exports.index = async (req, res, next) => {
             whoToFollow     : suggestions, 
         }); 
     }
-    catch ( e ) {       
-        console.log( '##################################' );
+    catch ( e ) {    
         console.log( e.message );
         res.render( 'error500' );
     }
@@ -32,17 +31,16 @@ exports.create = async (req, res, next) => {
     try {
         const filename      = req.session.user.id + '_' + new Date().getTime() + '.png';
         const image         = ImageUploader.uploadFromBinary(req.body.image, filename, 'public/images/posts/');
-        const postBody      = req.body.post;
         const user_id       = req.session.user.id;
-
+        const postBody      = req.body.post;
         const post = await postRepository.create( user_id, postBody, image ? filename : false );
+        
         await userRepository.incrementPostsCount( user_id );
-
         res.json({status: true, user: req.session.user, post: post.body});
         
     }
-    catch ( e ) {
-        console.log( 'ERROR POST ##############################' );
+    catch ( e ) 
+    {
         console.log( e.message );
         res.status(500).json({ status: false });
     }
