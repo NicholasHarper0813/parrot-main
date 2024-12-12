@@ -2,17 +2,17 @@
 
 const userService     = require( '../services/user-service' );
 const authService     = require( '../services/auth-service' );
+const ImageUploader   = require( '../services/image-uploader-service' );
 const userRepository  = require( '../repositories/user-repository' );
 const postRepository  = require( '../repositories/post-repository' );
-const ImageUploader   = require( '../services/image-uploader-service' );
 
 exports.show = async ( req, res, next ) => {
   try {
-    const userId          = req.params.id;
-    const user            = await userRepository.oneBy( 'id', userId );
-    const suggestions     = await userRepository.getFriendshipSuggestions( userId, 3 );
     const isFollowedByMe  = await userRepository.isUserFollowedByMe( userId, req.params.id );
+    const suggestions     = await userRepository.getFriendshipSuggestions( userId, 3 );
     const userPosts       = await postRepository.getPostsByUserId( userId );
+    const user            = await userRepository.oneBy( 'id', userId );
+    const userId          = req.params.id;
 
     if ( !user ) res.status( 404 ).render( 'error404' );
     else res.render( 'profile', { 
