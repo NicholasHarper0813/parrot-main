@@ -2,17 +2,18 @@
 
 const userService     = require( '../services/user-service' );
 const authService     = require( '../services/auth-service' );
-const ImageUploader   = require( '../services/image-uploader-service' );
 const userRepository  = require( '../repositories/user-repository' );
 const postRepository  = require( '../repositories/post-repository' );
+const ImageUploader   = require( '../services/image-uploader-service' );
 
 exports.show = async ( req, res, next ) => {
-  try {
+  try 
+  {
+    const userId          = req.params.id;
+    const user            = await userRepository.oneBy( 'id', userId );
+    const userPosts       = await postRepository.getPostsByUserId( userId );
     const isFollowedByMe  = await userRepository.isUserFollowedByMe( userId, req.params.id );
     const suggestions     = await userRepository.getFriendshipSuggestions( userId, 3 );
-    const userPosts       = await postRepository.getPostsByUserId( userId );
-    const user            = await userRepository.oneBy( 'id', userId );
-    const userId          = req.params.id;
 
     if ( !user ) res.status( 404 ).render( 'error404' );
     else res.render( 'profile', { 
@@ -27,10 +28,9 @@ exports.show = async ( req, res, next ) => {
       isUserOwnerProfile  : ( userId == req.session.user.id),        
     });
   } 
-  catch ( e ) 
+  catch (e) 
   {
-    console.log( e.message);
-    console.log(e);
+    console.log(e.message);
     res.render( 'error500' );
   }
 };
@@ -47,45 +47,42 @@ exports.update = async ( req, res, next ) => {
     const errors    = req.validationErrors();
     const username  = userService.slugfy( req.body.username );
     
-    if ( errors ) 
+    if (errors) 
     {
       res.status( 422 ).json({ status: false, message: errors[0].msg });
       return;
     }
 
     const user = await userRepository.oneBy( 'username', username );
-
-
-   if ( user && user.id != userId ) {
+    if (user && user.id != userId) 
+    {
       res.status( 422 ).json({ status: false, message: 'Username já está em uso. Escolha outro' });
       return;
     }
 
     const avatarName  = userId + '_avatar.png';
-    const avatar      = ImageUploader.uploadFromBinary( req.body.avatar, avatarName, 'public/images/avatars/' );
     const coverName   = userId + '_cover.png';
     const cover       = ImageUploader.uploadFromBinary( req.body.cover, coverName, 'public/images/covers/' );
-
+    const avatar      = ImageUploader.uploadFromBinary( req.body.avatar, avatarName, 'public/images/avatars/' );
     const profileData = {
       name      : req.body.name,
       bio       : req.body.bio,
       username  : username
     };
 
-    if ( cover ) profileData.cover    = coverName;
-    if ( avatar ) profileData.avatar  = avatarName;
+    if (cover) profileData.cover    = coverName;
+    if (avatar) profileData.avatar  = avatarName;
 
     await userRepository.update( userId, profileData );
-
+    
     const updatedUser = await userRepository.oneBy( 'id', userId );
     authService.createSessionFor( updatedUser, req );
 
     res.json({ status: true, data: profileData });
   } 
-  catch ( e ) 
+  catch (e) 
   {
-    console.log( e.message );
-    console.log( e );
+    console.log(e.message);
     res.status(500).json({ status: false, message: 'Erro ao atualizar seu profile.' });
   }
 };
