@@ -5,7 +5,6 @@ const notificationRepository    = require( '../repositories/notification-reposit
 
 exports.index = async ( req, res, next ) => {
     try {
-        // TODO paginacao
         const userId            = req.session.user.id;
         const suggestions       = await userRepository.getFriendshipSuggestions( userId, 3 );
         const notifications     = await notificationRepository.getByUserId( userId ); 
@@ -18,8 +17,8 @@ exports.index = async ( req, res, next ) => {
             notifications   : notifications
         }); 
     }
-    catch ( e ) {
-        console.log( "ERROR NOTIFICATIONS ##############" );
+    catch ( e )
+    {
         console.log( e.message );
         res.render( 'error500' );
     }
