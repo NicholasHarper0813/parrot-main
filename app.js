@@ -5,7 +5,6 @@ var expressValidator    = require('express-validator');
 var express             = require('express');
 var createError         = require('http-errors');
 var cookieParser        = require('cookie-parser');
-
 var feedRouter              = require('./routes/feed');
 var indexRouter             = require('./routes/index');
 var usersRouter             = require('./routes/users');
@@ -14,7 +13,6 @@ var profileRouter           = require('./routes/profile');
 var whoToFollowRouter       = require('./routes/who-to-follow');
 var notificationsRouter     = require('./routes/notifications');
 var passwordRecoverRouter   = require('./routes/password-recover');
-
 var app = express();
 
 app.set( 'views',        path.join( __dirname, 'views' ) );
@@ -30,7 +28,6 @@ app.use( session({
   resave            : false,
   saveUninitialized : false,
 }));
-
 app.use('/',                  indexRouter );
 app.use('/feed',              feedRouter );
 app.use('/user',              usersRouter );
@@ -42,7 +39,6 @@ app.use('/password-recover',  passwordRecoverRouter );
 app.use( function( req, res, next ) {
   next( createError( 404 ) );
 });
-
 app.use( function( err, req, res, next ) 
 {
   res.locals.message  = err.message;
