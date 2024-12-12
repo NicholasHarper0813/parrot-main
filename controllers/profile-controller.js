@@ -1,10 +1,10 @@
 'use strict';
 
 const userService     = require( '../services/user-service' );
+const authService     = require( '../services/auth-service' );
 const userRepository  = require( '../repositories/user-repository' );
 const postRepository  = require( '../repositories/post-repository' );
 const ImageUploader   = require( '../services/image-uploader-service' );
-const authService       = require( '../services/auth-service' );
 
 exports.show = async ( req, res, next ) => {
   try {
@@ -15,7 +15,6 @@ exports.show = async ( req, res, next ) => {
     const userPosts       = await postRepository.getPostsByUserId( userId );
 
     if ( !user ) res.status( 404 ).render( 'error404' );
-    
     else res.render( 'profile', { 
       user                : req.session.user,
       title               : user.name,
@@ -28,15 +27,14 @@ exports.show = async ( req, res, next ) => {
       isUserOwnerProfile  : ( userId == req.session.user.id),        
     });
   } 
-  catch ( e ) {
-    console.log('ERROR USER ############################');
+  catch ( e ) 
+  {
     console.log( e.message);
     console.log(e);
     res.render( 'error500' );
   }
 };
 
-// Apenas via ajax
 exports.update = async ( req, res, next ) => {
   try {
     req.assert( 'name',     'Nome inválido' ).isLength({ min: 3 });
@@ -45,28 +43,26 @@ exports.update = async ( req, res, next ) => {
     req.assert( 'avatar',   'Avatar inválido' ).optional().isLength({min: 10});
     req.assert( 'cover',    'Capa inválido' ).optional().isLength({min: 10});
 
-    console.log( "REQ BODY #######################", req.body.username );
-
     const userId    = req.session.user.id;
     const errors    = req.validationErrors();
     const username  = userService.slugfy( req.body.username );
     
-    if ( errors ) {
+    if ( errors ) 
+    {
       res.status( 422 ).json({ status: false, message: errors[0].msg });
       return;
     }
 
     const user = await userRepository.oneBy( 'username', username );
 
-    // se tem usuario com esse username e nao é o proprio usuário
-    if ( user && user.id != userId ) {
+
+   if ( user && user.id != userId ) {
       res.status( 422 ).json({ status: false, message: 'Username já está em uso. Escolha outro' });
       return;
     }
 
     const avatarName  = userId + '_avatar.png';
     const avatar      = ImageUploader.uploadFromBinary( req.body.avatar, avatarName, 'public/images/avatars/' );
-    
     const coverName   = userId + '_cover.png';
     const cover       = ImageUploader.uploadFromBinary( req.body.cover, coverName, 'public/images/covers/' );
 
@@ -86,8 +82,8 @@ exports.update = async ( req, res, next ) => {
 
     res.json({ status: true, data: profileData });
   } 
-  catch ( e ) {
-    console.log( 'ERROR PROFILE UPDATE #####################' );
+  catch ( e ) 
+  {
     console.log( e.message );
     console.log( e );
     res.status(500).json({ status: false, message: 'Erro ao atualizar seu profile.' });
