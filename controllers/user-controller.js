@@ -24,7 +24,8 @@ exports.follow = async ( req, res, next ) => {
 };
 
 exports.unfollow = async ( req, res, next ) => {
-    try {
+    try 
+    {
         const myId      = req.session.user.id;
         const friendId  = req.body.user_id;
 
