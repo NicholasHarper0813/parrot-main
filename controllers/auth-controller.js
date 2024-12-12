@@ -22,7 +22,6 @@ exports.login = async ( req, res, next ) => {
     try {
         req.assert( 'email', 'Email inválido' ).isEmail();
         req.assert( 'password', 'A senha deve ter entre 6 e 100 caracteres.' ).notEmpty().len( 6,100 );
-          
         if ( req.validationErrors() ) 
         {
             res.render('login', authService.formatLoginError( 'warning', credentials, errors[0].msg ) );
@@ -42,21 +41,21 @@ exports.login = async ( req, res, next ) => {
         if ( req.body.redir.length ) res.redirect(req.body.redir);
         else  res.redirect('/feed');
     } 
-    catch ( e ) 
+    catch (e) 
     {
       console.log( e.message );
       res.render( 'login', authService.formatLoginError( 'danger', credentials, 'Erro ao efetuar login. Tente novamente mais tarde.' ));
     }
 }
 
+exports.signupForm = ( req, res, next ) => {
+    res.render('signup', { title: 'Cadastre-se', bodyClass: 'auth', data: { email: '', password: '', password_conf: '', name: '' } });
+};
+
 exports.logout = ( req, res, next ) => {
     req.session.destroy();
     res.redirect('/');
 }
-
-exports.signupForm = ( req, res, next ) => {
-    res.render('signup', { title: 'Cadastre-se', bodyClass: 'auth', data: { email: '', password: '', password_conf: '', name: '' } });
-};
 
 exports.signup = async ( req, res, next ) => {
     const data = Object.assign({ email: '', password: '', password_conf: '', name: '' }, req.body);
@@ -66,10 +65,10 @@ exports.signup = async ( req, res, next ) => {
         req.assert( 'email', 'Email inválido' ).isEmail();
         req.assert( 'password', 'A senha deve ter entre 6 e 100 caracteres.' ).notEmpty().len(6,100);
         req.assert( 'password_conf', 'As senhas não coincidem.' ).equals(req.body.password);
-    
+        
         const errors = req.validationErrors();
     
-        if ( errors ) 
+        if (errors) 
         {
             res.render('signup', authService.formatSignUpError( 'warning', data, errors[0].msg ) );
             return;
@@ -85,7 +84,7 @@ exports.signup = async ( req, res, next ) => {
         authService.createSessionFor( user, req );
         res.redirect('/feed');
     }
-    catch ( e ) 
+    catch (e) 
     {
         if ( e.errors ) 
         {
@@ -109,7 +108,6 @@ exports.passwordRecover = async (req, res, next) => {
     try 
     {
         req.assert('email', 'Endereço de email inválido').isEmail();
-        
         if ( req.validationErrors() ) 
         {
             res.render( 'password-recover', authService.formatPasswordRecoverData('warning', data, error[0].msg ) );
@@ -117,16 +115,14 @@ exports.passwordRecover = async (req, res, next) => {
         }
     
         const user = await userRepository.oneBy( 'email', data.email );
-    
         res.render( 'password-recover', authService.formatPasswordRecoverData( 'success',
             { email: '' }, 
             'Se existe este email, enviamos uma mensagem com instruções para recuperar a senha.' 
         ));
     }
-    catch ( e ) 
+    catch (e) 
     {
         console.log( e.message );
-
         res.render( 'password-recover', authService.formatPasswordRecoverData( 'danger', data, 
             'Erro ao recuperar a senha. Tente mais tarde.'
         ));
