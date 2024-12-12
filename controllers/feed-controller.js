@@ -1,9 +1,9 @@
 'use strict';
 
 const ImageUploader     = require( '../services/image-uploader-service' );
-const postService       = require( '../services/post-service' );
 const userRepository    = require( '../repositories/user-repository' );
 const postRepository    = require( '../repositories/post-repository' );
+const postService       = require( '../services/post-service' );
 
 exports.index = async (req, res, next) => {
     try {
@@ -20,8 +20,8 @@ exports.index = async (req, res, next) => {
             whoToFollow     : suggestions, 
         }); 
     }
-    catch ( e ) {    
-        console.log( e.message );
+    catch (e) {    
+        console.log(e.message);
         res.render( 'error500' );
     }
 };
@@ -37,11 +37,10 @@ exports.create = async (req, res, next) => {
         
         await userRepository.incrementPostsCount( user_id );
         res.json({status: true, user: req.session.user, post: post.body});
-        
     }
-    catch ( e ) 
+    catch (e) 
     {
-        console.log( e.message );
+        console.log(e.message);
         res.status(500).json({ status: false });
     }
 };
