@@ -5,9 +5,9 @@ const userRepository = require( '../repositories/user-repository' );
 exports.index = async ( req, res, next ) => {
     try 
     {
-        const user          = req.session.user;
         const suggestions   = await userRepository.getFriendshipSuggestions( user.id, 18 );
         const whoToFollow   = suggestions.splice( 15, 3 );
+        const user          = req.session.user;
 
         res.render( 'who-to-follow', { 
             user        : user,
@@ -17,9 +17,9 @@ exports.index = async ( req, res, next ) => {
             whoToFollow : whoToFollow
         });
     } 
-    catch ( e )
+    catch (e)
     {
-        console.log( e.message );
+        console.log(e.message);
         res.render( 'error500' );
     }
 };
