@@ -23,14 +23,16 @@ exports.login = async ( req, res, next ) => {
         req.assert( 'email', 'Email inválido' ).isEmail();
         req.assert( 'password', 'A senha deve ter entre 6 e 100 caracteres.' ).notEmpty().len( 6,100 );
           
-        if ( req.validationErrors() ) {
+        if ( req.validationErrors() ) 
+        {
             res.render('login', authService.formatLoginError( 'warning', credentials, errors[0].msg ) );
             return;
         }
     
         const user = await userRepository.oneBy( 'email', credentials.email );
       
-        if ( !user || !user.hasValidPassword( credentials.password ) ) {
+        if ( !user || !user.hasValidPassword( credentials.password ) ) 
+        {
             res.render('login', authService.formatLoginError( 'warning', credentials, 'Email e/ou senha inválidos.' ) );
             return;
         }
@@ -67,7 +69,8 @@ exports.signup = async ( req, res, next ) => {
     
         const errors = req.validationErrors();
     
-        if ( errors ) {
+        if ( errors ) 
+        {
             res.render('signup', authService.formatSignUpError( 'warning', data, errors[0].msg ) );
             return;
         }
