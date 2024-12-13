@@ -1,7 +1,6 @@
 'use strict';
 
 const models = require( '../models' );
-
 exports.create = async ( from_user_id, to_user_id, notification_text ) => {
     await models.Notification.create({
         user_id: parseInt( to_user_id ),
