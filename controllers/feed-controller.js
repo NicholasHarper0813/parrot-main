@@ -1,12 +1,13 @@
 'use strict';
 
-const ImageUploader     = require( '../services/image-uploader-service' );
 const userRepository    = require( '../repositories/user-repository' );
 const postRepository    = require( '../repositories/post-repository' );
+const ImageUploader     = require( '../services/image-uploader-service' );
 const postService       = require( '../services/post-service' );
 
 exports.index = async (req, res, next) => {
-    try {
+    try
+    {
         const user_id           = req.session.user.id;
         const feed              = await userRepository.getFeedData( user_id );
         const suggestions       = await userRepository.getFriendshipSuggestions( user_id, 3 );
@@ -20,7 +21,8 @@ exports.index = async (req, res, next) => {
             whoToFollow     : suggestions, 
         }); 
     }
-    catch (e) {    
+    catch (e) 
+    {    
         console.log(e.message);
         res.render( 'error500' );
     }
@@ -28,7 +30,8 @@ exports.index = async (req, res, next) => {
 
 
 exports.create = async (req, res, next) => {
-    try {
+    try 
+    {
         const filename      = req.session.user.id + '_' + new Date().getTime() + '.png';
         const image         = ImageUploader.uploadFromBinary(req.body.image, filename, 'public/images/posts/');
         const user_id       = req.session.user.id;
