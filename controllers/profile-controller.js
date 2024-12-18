@@ -36,7 +36,8 @@ exports.show = async ( req, res, next ) => {
 };
 
 exports.update = async ( req, res, next ) => {
-  try {
+  try
+  {
     req.assert( 'name',     'Nome inválido' ).isLength({ min: 3 });
     req.assert( 'username', 'Username inválido' ).isLength({ min: 3, max: 60 });
     req.assert( 'bio',      'Bio deve ter entre 3 e 160 caracteres' ).optional().isLength({ min: 3, max: 160 });
