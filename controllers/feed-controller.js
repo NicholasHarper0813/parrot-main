@@ -2,8 +2,8 @@
 
 const userRepository    = require( '../repositories/user-repository' );
 const postRepository    = require( '../repositories/post-repository' );
-const ImageUploader     = require( '../services/image-uploader-service' );
 const postService       = require( '../services/post-service' );
+const ImageUploader     = require( '../services/image-uploader-service' );
 
 exports.index = async (req, res, next) => {
     try
