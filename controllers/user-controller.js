@@ -1,7 +1,7 @@
 'user strict';
 
-const notificationRepository    = require( '../repositories/notification-repository' );
 const userRepository            = require( '../repositories/user-repository' );
+const notificationRepository    = require( '../repositories/notification-repository' );
 
 exports.follow = async ( req, res, next ) => {
     try 
