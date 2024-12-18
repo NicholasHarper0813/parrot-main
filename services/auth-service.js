@@ -11,21 +11,24 @@ const formatErrorResult = ( title, bodyClass, errorType, message ) => {
      };
  };
 
-exports.formatLoginError = ( errorType, credentials, message ) => {
+exports.formatLoginError = ( errorType, credentials, message ) => 
+{
     const error = formatErrorResult( 'Entrar', 'auth', errorType, message );
     error.data = credentials;
     
     return error;
 };
 
-exports.formatSignUpError = ( errorType, data, message ) => {
+exports.formatSignUpError = ( errorType, data, message ) => 
+{
     const error = formatErrorResult( 'Cadastro', 'auth', errorType, message );
     error.data = data;
     
     return error;
 }
 
-exports.formatPasswordRecoverData = ( errorType, data, message ) => {
+exports.formatPasswordRecoverData = ( errorType, data, message ) => 
+{
     const error = formatErrorResult( 'Cadastro', 'auth', errorType, message );
     error.data = data;
     
@@ -36,10 +39,10 @@ exports.createSessionFor = ( user, req ) => {
     const entities = new Entities();
     req.session.user = { 
         id: user.id, 
-        avatar: entities.encode(user.avatar),
-        cover: entities.encode(user.cover),
         name: entities.encode(user.name), 
         username: entities.encode(user.username),
+        cover: entities.encode(user.cover),
+        avatar: entities.encode(user.avatar),
         following: user.following_count, 
         followers: user.followers_count
       };
