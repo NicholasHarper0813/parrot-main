@@ -3,7 +3,8 @@
 const userRepository    = require( '../repositories/user-repository' );
 const authService       = require( '../services/auth-service' );
 
-exports.loginForm = ( req, res, next ) => {
+exports.loginForm = ( req, res, next ) => 
+{
     const redir = (req.query.redirect && req.query.redirect.length) 
         ? decodeURIComponent(req.query.redirect) 
         : '';
@@ -16,10 +17,12 @@ exports.loginForm = ( req, res, next ) => {
     });
 };
 
-exports.login = async ( req, res, next ) => {
+exports.login = async ( req, res, next ) =>
+{
     const credentials = Object.assign({ email: '', password: '' }, req.body);
 
-    try {
+    try 
+    {
         req.assert( 'email', 'Email inválido' ).isEmail();
         req.assert( 'password', 'A senha deve ter entre 6 e 100 caracteres.' ).notEmpty().len( 6,100 );
         if ( req.validationErrors() ) 
