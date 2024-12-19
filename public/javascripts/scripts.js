@@ -1,26 +1,28 @@
-(function ($) {
+(function ($) 
+ {
     $( 'form' ).on( 'submit', function (e) {
         const $this = $(this);
         
-        if ($this.data('invalid') === true) {
+        if ($this.data('invalid') === true) 
+        {
             e.preventDefault();
-        } else { return true; }
+        } 
+        else 
+        {
+            return true;
+        }
         
         const validator = new Validator();
         const $button = $this.find( '[type="submit"]' );
         
-        // limpa os errors do form
         FormErrors.clear();
-
-        // disabilita o form para previnir multiplos submmits
         $this.find( 'fieldset' ).attr( 'disabled', true );
 
-        // muda o texto do botao
-        if ( $button.data('loading') && $button.data('text') ) {
+        if ( $button.data('loading') && $button.data('text') ) 
+        {
             $button.text($button.data('loading'));
         }
 
-        // validar
         $( '[data-validator]' ).each(function (i, element) {
             var validation = $(element).data('validator');
             var selector = $(element).data('selector');
@@ -29,22 +31,19 @@
             else validator[validation](element);
         });
 
-        // mostrar errors
-        if ( validator.hasErrors() ) {
+        if ( validator.hasErrors() ) 
+        {
             FormErrors.show( validator.getErrors() );
             
-            // volta com o texto do botao original
-            if ( $button.data('loading') && $button.data('text') ) {
+            if ( $button.data('loading') && $button.data('text') ) 
+            {
                 $button.text($button.data('text'));
             }
 
-            // habilita do form denovo
             $this.find( 'fieldset' ).attr( 'disabled', false );
             return false;
         }
 
-        // precisa habilitar o form denovo para fazer o submit com os dados do form
-        // caso contrario o form vai ser enviado em dados
         $this.find( 'fieldset' ).attr( 'disabled', false );
         $this.data('invalid', false);
         $this.submit();
@@ -53,13 +52,15 @@
 } (jQuery));
 
 
-(function ($) {
+(function ($) 
+{
     $( '.user-menu-toggler' ).on('click', function (e) {
         $('.user-menu').toggle(200);
     });
 } (jQuery));
 
-(function ($) {
+(function ($) 
+{
     $('#post-modal').on('hidden.bs.modal', function (e) {
         $(this).find('#post-field').val('').trigger('input'); // zerar o contador
         $( '#img-data' ).val('');
@@ -67,20 +68,24 @@
     });
 } (jQuery) );
 
-(function ($) {
+(function ($) 
+{
     var MAX_CHARS = 240;
     var $charsLeftArea = $( '.chars-left' );
 
     $( document ).on('input', '#post-field', function (e) {
         var charsLeft = MAX_CHARS - $(this).val().length;
         
-        if (charsLeft < 50 && charsLeft >= 0) {
+        if (charsLeft < 50 && charsLeft >= 0) 
+        {
             $charsLeftArea.addClass('text-warning').removeClass('text-danger');
         } 
-        else if (charsLeft < 0) {
+        else if (charsLeft < 0) 
+        {
             $charsLeftArea.removeClass('text-warning').addClass('text-danger');
         }
-        else {
+        else
+        {
             $charsLeftArea.removeClass('text-warning text-danger');
         }
 
@@ -138,11 +143,13 @@
 } (jQuery));
 
 (function ($) {
-    if (  !window.URL || ! window.URL.createObjectURL) {
+    if (!window.URL || ! window.URL.createObjectURL) 
+    {
         $( '.uplaod-image-button-area' ).remove();
     }
    
-    function convertImageToBase64 () {
+    function convertImageToBase64 ()
+    {
         var canvas = document.createElement('canvas');
         canvas.width = this.width;
         canvas.height = this.height;
@@ -150,9 +157,10 @@
         ctx.drawImage(this, 0,0);
         $( '#img-data' ).val(canvas.toDataURL());
         delete canvas;
-      }
+     }
 
-    function createImage (src) {              
+    function createImage (src) 
+    {              
         var img = new Image();
         img.src = URL.createObjectURL(src);
         img.onload = convertImageToBase64;
@@ -165,13 +173,15 @@
 
         var image = this.files[0];
 
-        if (image.type != 'image/png' && image.type != 'image/jpeg') {
+        if (image.type != 'image/png' && image.type != 'image/jpeg') 
+        {
             $('[data-toggle="tooltip"]').tooltip('hide');
             $( '.post-error-area' ).text('Somente JPEG ou PNG permitidos').show();
             return;
         }
 
-        if (image.size > 800000) {
+        if (image.size > 800000) 
+        {
             $('[data-toggle="tooltip"]').tooltip('hide');
             $( '.post-error-area' ).text('a imagem deve ter até 800Kb').show();
             return;
@@ -180,7 +190,6 @@
         $( '.post-error-area' ).hide();
         $('[data-toggle="tooltip"]').tooltip('hide');
 
-        // storeImageBase64(image);
         var img = createImage(image);        
         img.classList = 'img-fluid';
 
@@ -194,14 +203,16 @@
     });
 } (jQuery));
 
-(function ($) {
+(function ($) 
+{
     $( '.btn-follow' ).on( 'click', function (e) {
         e.stopImmediatePropagation();
         var $this = $(this);
         console.log($this.data('user_id'));
         $this.attr('disabled', true);
 
-        if ( $this.data('action') === 'follow' ) {
+        if ( $this.data('action') === 'follow' ) 
+        {
             $.post( '/user/follow', { user_id: $this.data('user_id') }, function (response) {}, 'json')
             .always(function() {
                 $this.text($this.data('follow'));
@@ -223,13 +234,12 @@
     });
 } (jQuery));
 
-// profile update
-( function ( $ ) {
+( function ( $ ) 
+{
     $( document).on( 'click', '#update-profile-button', function ( e ) {
         e.preventDefault();
         var $this = $( this ); 
         var $modalContent = $this.parents( '.modal-footer' ).prev();
-
         var profileData = {
             name: $modalContent.find('#txtname').val(),
             username: $modalContent.find('#txtusername').val(),
@@ -282,14 +292,12 @@
     });
 } ( jQuery ) );
 
-
-// input file upload
 ( function ( $ ) {
-    $.fn.inputFile = function () {
+    $.fn.inputFile = function ()
+    {
         return this.each( function () {
             $( this ).on( 'change', function () {
                 $( document ).trigger( 'inputFile-chooseFile' );
-                console.log( this.files );
                 if ( ! this.files.length ) return;
                 
                 const file = this.files[ 0 ];
@@ -297,13 +305,14 @@
                 const hiddenInput = $( this ).data( 'img-target' );
                 const inputName = $( this ).attr( 'name' );
 
-                
-                if ( file.size > 800000 ) {
+                if ( file.size > 800000 ) 
+                {
                     $( document ).trigger( 'image-size-error' );
                     return;
                 }
                 
-                if ( file.type != 'image/png' && file.type != 'image/jpeg' ) {
+                if ( file.type != 'image/png' && file.type != 'image/jpeg' ) 
+                {
                     $( document ).trigger( 'image-mime-error' );
                     return;
                 }
