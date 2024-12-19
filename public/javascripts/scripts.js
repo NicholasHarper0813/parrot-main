@@ -126,11 +126,9 @@
         $template.find('.post-user-alias').text('@' + data.user.username);
         $template.find('.post-time').text('1 s');
         $template.find('.feed-post-content').html(data.post);       
-
-        $feed.removeClass('d-none');
         $template.insertAfter('.list-group-header');
+        $feed.removeClass('d-none');
         $( '.welcome-component' ).remove();
-
     } );
 } (jQuery));
 
@@ -172,7 +170,6 @@
         if (!this.files[0])  return;
 
         var image = this.files[0];
-
         if (image.type != 'image/png' && image.type != 'image/jpeg') 
         {
             $('[data-toggle="tooltip"]').tooltip('hide');
@@ -257,10 +254,12 @@
             window.location.reload();
         }, 'json' )
         .catch( function ( e, v, c ) {
-            if ( e.status === 422 ) {
+            if ( e.status === 422 ) 
+            {
                 showAlert( 'warning', 'Username já está em uso, escolha outro.' );
             }
-            else {
+            else 
+            {
                 showAlert( 'danger', 'Erro ao atualizar o profile' );
             }
         } )
