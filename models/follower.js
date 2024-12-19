@@ -1,7 +1,8 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Follower = sequelize.define('Follower', {
-    id: {
+    id: 
+    {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
