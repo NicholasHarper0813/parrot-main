@@ -5,65 +5,79 @@ const bcrypt = require('bcrypt');
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     name: DataTypes.STRING,
-    email: {
+    email: 
+    {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: {
+      unique:
+      {
         args: true,
         msg: 'Email em uso. Por favor, escolha outro.'
       }
     },
-    username: {
+    username: 
+    {
       type: DataTypes.STRING,
-      unique: {
+      unique: 
+      {
         args: true,
         msg: 'Este nome já está em uso!'
       }
     },
     password: DataTypes.STRING,
-    avatar: {
+    avatar: 
+    {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: 'default_avatar.png'
     },
-    cover: {
+    cover:
+    {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: 'default_cover.png'
     },
-    posts_count: {
+    posts_count: 
+    {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0
     },
-    following_count: {
+    following_count: 
+    {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0
     },
-    followers_count: {
+    followers_count: 
+    {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0
     },
-    bio: {
+    bio: 
+    {
       type: DataTypes.STRING,
       allowNull: true
     },
   }, {
-    hooks: {
-      beforeCreate : user => {
+    hooks: 
+    {
+      beforeCreate : user => 
+      {
         const salt = bcrypt.genSaltSync();
         user.password = bcrypt.hashSync( user.password, salt );
       }
     }
   });
 
-  User.prototype.hasValidPassword = function ( password ) { 
+  User.prototype.hasValidPassword = function ( password ) 
+  { 
     return bcrypt.compareSync(password, this.password);
   }
 
-  User.associate = function(models) {
+  User.associate = function(models) 
+  {
     User.hasMany(models.Post, {
       foreignKey: 'user_id',
       onDelete: 'CASCADE'
