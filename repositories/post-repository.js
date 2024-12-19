@@ -6,9 +6,8 @@ const postService = require('../services/post-service');
 exports.create = ( user_id, body, image ) => {
     const parsedBody = postService.parseBody( body );
     const content = image ? parsedBody + `<br /><img src="/images/posts/${image}" class="img-fluid rounded">` : parsedBody;
-
     const post = models.Post.create({ 
-        user_id: user_id, 
+        user_id: user_id,
         body: content
     });
 
